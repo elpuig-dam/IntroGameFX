@@ -3,10 +3,7 @@ package dam.mp3.uf5.introgamesfx.control;
 import dam.mp3.uf5.introgamesfx.MainApp;
 import dam.mp3.uf5.introgamesfx.config.WindowSettings;
 import dam.mp3.uf5.introgamesfx.sprites.Pilota;
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +14,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
@@ -29,6 +27,13 @@ public class PilotaController implements Initializable {
     private GraphicsContext gc;
     private Pilota pilota;
     private Image fons;
+
+    @FXML
+    private ImageView imvBgd1;
+
+
+    private int BACKGROUND_WIDTH = 1500;
+    private ParallelTransition parallelTransition;
 
     /**
      * Opció 1: Animationtimer
@@ -68,6 +73,18 @@ public class PilotaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println(url);
+
+        fons = new Image(MainApp.class.getResource("images/space.jpeg").toExternalForm());
+        imvBgd1.setImage(fons);
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(50000), imvBgd1);
+        translateTransition.setFromX(0);
+        translateTransition.setToX(-1 * BACKGROUND_WIDTH);
+        translateTransition.setInterpolator(Interpolator.LINEAR);
+
+        parallelTransition = new ParallelTransition(translateTransition);
+        parallelTransition.setCycleCount(Animation.INDEFINITE);
+        parallelTransition.play();
 
         pilota = new Pilota(new Image(MainApp.class.getResource("images/pilota.png").toExternalForm()));
         mainCanvas.setHeight(WindowSettings.HEIGHT);
